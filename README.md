@@ -1,15 +1,7 @@
-# PortfolioTemplate
+# Portfolio
 
-A simple portfolio of projects.
+Welcome to my portfolio! 
 
-## For Students:
+This is a collection of my software projects from academia, industry, and research. 
 
-From the homepage of this repository, select "Use this template" to import these files into a new repository within your own account.
-
-## Then Customize:
-
-Once you have your own version, update content:
-
-- Change this ReadMe to be about YOUR portfolio of work.
-- Set up GitHub Pages to host your Portfolio live on GitHub.
-- Update the look and feel of the Portfolio to showcase your personality.
+Please reach out to juliettekilgore@gmail.com with any inquiries.
