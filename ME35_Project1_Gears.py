@@ -30,7 +30,7 @@ GPIO.add_event_detect(channel, GPIO.RISING)  # add rising edge detection on a ch
 num_steps = 200
 step_delay = 0.03
 
-def counterclockwise ():
+def clockwise ():
      while True:   
         current_step = 0
         print ('in counter clockwise')
@@ -68,12 +68,12 @@ def counterclockwise ():
         GPIO.cleanup()
         break    
      
-def clockwise ():
+def counterclockwise ():
      while True:   
         current_step = 0
         print ('in clockwise')
         
-        for x in range(num_steps):
+        for x in range(300):
             if current_step == 0:
                 GPIO.output(OUT1,GPIO.HIGH)
                 GPIO.output(OUT2,GPIO.LOW)
@@ -105,21 +105,31 @@ def clockwise ():
             if current_step == 3:
                 current_step = 0
                 continue 
-            current_step = current_step + 1
-            #GPIO.wait_for_edge(channel, GPIO.RISING)
             if GPIO.event_detected(channel):  #assign channel
-                my_callback(channel)
+                time.sleep (0.1)
                 print ('switch pressed')
+                if GPIO.input(channel) == GPIO.HIGH:
+                    my_callback(channel)
+                    print('Switch stabilized. Performing action.')
 
             print ('checked wait')
+            current_step = current_step + 1
+            #GPIO.wait_for_edge(channel, GPIO.RISING)
         GPIO.cleanup()
         break    
 
 
 def my_callback(channel):
-    print('This is a edge event callback function!')
-    time.sleep(0.5)
-    counterclockwise()
+    #print('This is a edge event callback function!')
+    #time.sleep(0.1)
+    #clockwise()
+    print('Switch state change detected!')
+    time.sleep(0.1)  # Add a small delay for stability
+    if GPIO.input(channel) == GPIO.HIGH:
+        print('Switch is HIGH. Performing action...')
+        clockwise()
+    else:
+        print('Switch is LOW. Ignoring...')
 
 #GPIO.add_event_detect(channel, GPIO.RISING, callback=my_callback)  # add rising edge detection on a channel
 
@@ -128,7 +138,7 @@ try:
     while True:
         print ('in while true')
         #GPIO.wait_for_edge(channel, GPIO.RISING)
-        clockwise()
+        counterclockwise()
 
         #GPIO.add_event_detect(channel, GPIO.RISING)  # add rising edge detection on a channel
         
