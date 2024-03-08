@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Functioning Buttons</title>
+
+
+<style>
+ button {
+   padding: 10px 20px;
+   font-size: 18px;
+   cursor: pointer;
+   margin: 5px;
+ }
+   .container {
+       position: relative;
+       width: 200px;
+       height: 200px;
+   }
+  
+   .btn {
+       position: absolute;
+       width: 120px;
+       height: 120px;
+       background-color: #df82eb;
+       border: none;
+       border-radius: 5px;
+   }
+  
+   #stopButton {
+       left: 215px;
+       top: 180px;
+   }
+  
+   #forButton {
+       left: 215px;
+       top: 20px;
+   }
+  
+   #backButton {
+       left: 215px;
+       top: 340px;
+   }
+  
+   #leftButton {
+       left: 55px;
+       top: 180px;
+   }
+  
+   #rightButton {
+       left: 375px;
+       top: 180px;
+   }
+
+
+   body {
+   font-family: Arial, sans-serif;
+   margin: 0;
+   padding: 0;
+ }
+ header {
+   background-color: #59ae8e;
+   color: #0c1cae99;
+   padding: 20px;
+   text-align: center;
+ }
+ .project-name {
+   font-size: 24px;
+   font-weight: bold;
+ }
+ .instructions {
+   margin-top: 10px;
+   font-style: italic;
+ }
+ .authors {
+   margin-top: 10px;
+ }
+
+
+ .light-container {
+   text-align: center; /* Center the content horizontally */
+ }
+ .light {
+   width: 20px;
+   height: 20px;
+   background-color: gray;
+   border-radius: 50%;
+   display: inline-block;
+ }
+ .green {
+   background-color: rgb(0, 255, 0);
+ }
+ .red {
+   background-color: rgb(255, 0, 0);
+ }
+ .yellow {
+   background-color: rgb(255, 255, 0);
+ }
+</style>
+</head>
+
+
+
+
+<body>
+
+
+ <header>
+   <div class="project-name">PIT STOP</div>
+   <div class="instructions">
+     <p>Instructions:</p>
+     <p>Use the following buttons to move the 3CREATE robot forwards, backwards, left or right, as well as stop the robot</p>
+   </div>
+   <div class="authors">
+     <p>Authors:</p>
+     <p>Joshua Balbi</p>
+     <p>Juliette Kilgore</p>
+     <p>Vivian Becker</p>
+   </div>
+ </header>
+ <div class="light-container">
+   <div id="greenlight" class="light"></div>
+   <div id="yellowlight" class="light"></div>
+   <div id="redlight" class="light"></div>
+</div>
+
+
+<div class="container">
+   <button class="btn" id="stopButton">Stop</button>
+   <button class="btn" id="forButton">Forwards</button>
+   <button class="btn" id="backButton">Backwards</button>
+   <button class="btn" id="leftButton">Left</button>
+   <button class="btn" id="rightButton">Right</button>
+</div>
+
+
+</body>
+
+
+
+
+
+
+<script>
+
+
+ url =  'https://api.airtable.com/v0/apppLWB4dSvsOwlTL/Table1'
+ ACCESS_TOKEN = 'patV99gXKs9u1mdlM.a5c5af5886884c7772fb6705616ddc29294a8c133d0830871a3914be3edda780'
+ HEADERS = {'Authorization': 'Bearer ' + ACCESS_TOKEN}
+ remember = ""
+
+
+
+
+ // Function to handle click event for changing text
+ function rightButton() {
+   if (remember != "Right"){//} && (remember !=  "")){
+     reset()
+     const updatedData = {
+     "fields": {
+       "Xdirection": ".2",
+       "calls": "Right",
+       "On/Off": "1",
+     }};
+     update("receOiu0YdZtmh4pz", updatedData)
+     remember = "Right"
+   } else {
+     yellowlight()
+   }
+ }
+
+
+ // Function to handle click event for toggling visibility
+ function leftButton() {
+   if (remember != "Left"){//&& (remember !=  "")){
+     reset()
+     const updatedData = {
+     "fields": {
+       "Xdirection": ".2",
+       "calls": "Left",
+       "On/Off": "1",
+     }};
+     update("recUg9NsRHoGujT5M", updatedData)
+     remember = "Left"
+   } else {
+     yellowlight()
+   }
+ }
+
+
+ // Function to handle click event for resetting text
+ function forButton() {
+   if (remember != "Forward"){
+     reset()
+     const updatedData = {
+     "fields": {
+       "Xdirection": ".2",
+       "calls": "Forward",
+       "On/Off": "1",
+     }};
+     update("recGdDrBzGdIJw0rv", updatedData)
+     remember = "Forward"
+   } else {
+     yellowlight()
+   }
+ }
+
+
+ // Function to handle click event for resetting text
+ function backButton() {
+   if (remember != "Backwards"){
+     reset()
+     const updatedData = {
+     "fields": {
+       "Xdirection": ".2",
+       "calls": "Backwards",
+       "On/Off": "1",
+     }};
+     update("recyA1QQGn3R0wVDZ", updatedData)
+     remember = "Backwards"
+   } else {
+     yellowlight()
+   }
+ }
+
+
+ function stopButton() {
+   reset()
+   remember = ""
+ }
+
+
+
+
+ function reset() {
+   const updatedData = {
+     "fields": {
+       "Xdirection": ".2",
+       "calls": remember,
+       "On/Off": "0",
+     }};
+   if (remember == "Forward") {
+     update("recGdDrBzGdIJw0rv", updatedData)
+   } else if (remember == "Left"){
+     update("recUg9NsRHoGujT5M", updatedData)
+   } else if (remember == "Right"){
+     update("receOiu0YdZtmh4pz", updatedData)
+   } else if (remember == "Backwards"){
+     update("recyA1QQGn3R0wVDZ", updatedData)
+   } else if (remember != "") {
+     yellowlight()
+   }
+ }
+
+
+ document.addEventListener('keydown', function(event) {
+   const key = event.key.toLowerCase();
+   switch (key) {
+     case 'arrowup':
+       forButton()
+       break;
+     case 'arrowdown':
+       backButton()
+       break;
+     case 'arrowleft':
+       leftButton()
+       break;
+     case 'arrowright':
+       rightButton()
+       break;
+     case 's':
+       reset()
+       break;
+   }
+ });
+
+
+
+
+ function update(num, updatedData) {
+   // Make a PATCH request to update the record
+   curl = url+"/"+num
+   fetch(curl, {
+     method: 'PATCH',
+     headers: {
+       'Authorization': `Bearer ${ACCESS_TOKEN}`,
+       'Content-Type': 'application/json'
+     },
+     body: JSON.stringify(updatedData)
+   })
+   .then(response => {
+     if (!response.ok) {
+       throw new Error('Failed to update record');
+     }
+     return response.json();
+   })
+   .then(data => {
+     console.log('Record updated successfully:', data);
+     greenlight()
+   })
+   .catch(error => {
+     redlight()
+   });
+ }
+
+
+ function greenlight() {
+ // Simulate successful command execution
+ setTimeout(function() {
+   // Show green light for 1 second
+   document.getElementById('greenlight').classList.add('green');
+   setTimeout(function() {
+     // Reset green light after 1 second
+     document.getElementById('greenlight').classList.remove('green');
+   }, 1000);
+ }, 1000); // Simulate delay of 1 second for command execution
+}
+
+
+function redlight() {
+ // Simulate successful command execution
+ setTimeout(function() {
+   // Show green light for 1 second
+   document.getElementById('redlight').classList.add('red');
+   setTimeout(function() {
+     // Reset green light after 1 second
+     document.getElementById('redlight').classList.remove('red');
+   }, 1000);
+ }, 1000); // Simulate delay of 1 second for command execution
+}
+ function yellowlight() {
+ // Simulate successful command execution
+ setTimeout(function() {
+   // Show green light for 1 second
+   document.getElementById('yellowlight').classList.add('yellow');
+   setTimeout(function() {
+     // Reset green light after 1 second
+     document.getElementById('yellowlight').classList.remove('yellow');
+   }, 1000);
+ }, 1000); // Simulate delay of 1 second for command execution
+}
+
+
+ // Add click event listeners to buttons
+ document.getElementById("rightButton").addEventListener("click", rightButton);
+ document.getElementById("leftButton").addEventListener("click", leftButton);
+ document.getElementById("forButton").addEventListener("click", forButton);
+ document.getElementById("backButton").addEventListener("click", backButton);
+ document.getElementById("stopButton").addEventListener("click", stopButton);
+</script>
+
+
+</body>
+</html>
+</html>
