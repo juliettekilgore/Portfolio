@@ -1,0 +1,7 @@
+0 Mario
+1 Cube
+2 Darth
+3 Mug
+4 Kiwi
+5 Elephant
+6 Bear
