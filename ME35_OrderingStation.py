@@ -26,7 +26,7 @@ time.sleep(1)
 
 i=1
 
-ACCESS_TOKEN = 'patnz4q3YD2b6QE5b.c888c6f15cb3bbb30c73cb0bcd9b186c09f7459d2e0569c8f80a34dd45a8651b'
+ACCESS_TOKEN = {Access Token Here}
 HEADERS = {'Authorization': 'Bearer ' + ACCESS_TOKEN}
 
 def PublishStencil(stencil, i ):
