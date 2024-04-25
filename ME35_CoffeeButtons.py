@@ -6,20 +6,19 @@ import time
 #set up gpio
 GPIO.setmode(GPIO.BCM)
 power_pin = 18
-small_button_pin = 24 #CHANGE
+small_button_pin = 24 
 large_button_pin = 23
 GPIO.setup(power_pin, GPIO.OUT)
 GPIO.setup(small_button_pin, GPIO.OUT)
 GPIO.setup(large_button_pin, GPIO.OUT)
 
-#set up airtable, CHANGE THESE VALUES
+#set up airtable
 URL_COFFEE = 'https://api.airtable.com/v0/applK0NRaebYim73c/Control_table'
-ACCESS_TOKEN_COFFEE ='patdq1umq6dz00Wjg.1fa65436b75bc5e22d7d04d39029973f64a8cc0c2057984e84e58a1947f50132'
-#ACCESS_TOKEN_COFFEE = 'patCR9pgSxqhZuaYz.47cc2a0606f90cd84434d6b1c2e59a61e8ccd630088a91080726456087889424'
+ACCESS_TOKEN_COFFEE = {Access Code Here}
 HEADERS_COFFEE = {'Authorization': 'Bearer ' + ACCESS_TOKEN_COFFEE}
 
 URL_INTEGRATION = 'https://api.airtable.com/v0/appZXeS3vQKy6x41E/Drive'
-ACCESS_TOKEN = 'patnz4q3YD2b6QE5b.c888c6f15cb3bbb30c73cb0bcd9b186c09f7459d2e0569c8f80a34dd45a8651b'
+ACCESS_TOKEN = {Access Code Here}
 HEADERS = {'Authorization': 'Bearer ' + ACCESS_TOKEN}
 
 def airtable_requests_coffee():
@@ -32,7 +31,6 @@ def airtable_requests_coffee():
             button_states = {}
             for record in records:
                 fields = record['fields']
-                #print("Record Fields:", fields)
                 if 'Name' in fields and 'Value' in fields:
                     button_name = fields['Name']
                     button_value = fields['Value']
@@ -54,11 +52,8 @@ def airtable_requests_transport(id):
         data = response.json()
         if data:
             fields = data.get('fields', {})
-            #print("Record Fields:", fields)
-
             design_value = fields.get('Design')
 
-            # Making an if statement based on the 'Design' value
             if design_value == 'Large':
                 return('Large')
             elif design_value == 'Small':
@@ -123,15 +118,10 @@ def coffee_buttons(power_status, size):
          return 'error'
 def update_airtable_coffee(id,new_value, URL, headers):
     try:
-        # Construct the data payload for updating the record
+        # data payload for updating the record
         data = {'fields': {'Value': int(new_value)}}
-
-
-        # Make a PATCH request to update the record with the new value
-
         response = requests.patch(f'{URL}/{id}', headers=headers, json=data)
-
-        # Check if the update was successful
+        # Check for success
         if response.status_code == 200:
             print("Airtable value updated successfully")
         else:
@@ -141,15 +131,8 @@ def update_airtable_coffee(id,new_value, URL, headers):
 
 def update_airtable_int(id,new_value, URL, headers):
     try:
-        # Construct the data payload for updating the record
         data = {'fields': {'Value': int(new_value)}}
-
-
-        # Make a PATCH request to update the record with the new value
-
         response = requests.patch(f'{URL}/{id}', headers=headers, json=data)
-
-        # Check if the update was successful
         if response.status_code == 200:
             print("Airtable value updated successfully")
         else:
@@ -176,7 +159,7 @@ def update_airtable_integration_F(record_id, field_name, new_value):
         print("Airtable updated successfully")
 
 def coffee_done(input):
-    print("Input value:", input)  # Debugging statement
+    print("Input value:", input) 
     if input == 'success':
             print("Coffee is successful. Starting countdown timer...")
             for i in range(50, 0, -1):
@@ -190,7 +173,6 @@ def reset_airtable():
     update_airtable_coffee('recC8aATqiAUW6DEU', 0, URL_COFFEE, HEADERS_COFFEE) #power status
     update_airtable_coffee('recG53DGW7cPE2nfA', 0, URL_COFFEE, HEADERS_COFFEE) #coffee button
     update_airtable_coffee('recGzal1MiC7xAezn', 0, URL_COFFEE, HEADERS_COFFEE) # coffee done
-    #update_airtable_coffee('rechYVbPiXBVTHqHx', 0, URL_COFFEE, HEADERS_COFFEE)
 
 try:
     while True:
@@ -216,10 +198,7 @@ try:
             if coffee_status == 'success':
                 coffee_done(coffee_status)
                 GPIO.output(power_pin, GPIO.LOW)
-                #update_airtable_coffee('rechYVbPiXBVTHqHx', 0, URL_COFFEE, HEADERS_COFFEE) #closed with lid reset
                 continue
-            #update_airtable_int('recY2LOdyKyHehK5Y', 1, URL_INTEGRATION, HEADERS)
-            #update_airtable_integration('recY2LOdyKyHehK5Y', 'Done', 1)
             update_airtable_integration_F('recY2LOdyKyHehK5Y', 'Done', 1) #coffee done airtable
             update_airtable_coffee('recGzal1MiC7xAezn', 1, URL_COFFEE, HEADERS_COFFEE) #set coffee done localll=y
             update_airtable_coffee('rechYVbPiXBVTHqHx', 0, URL_COFFEE, HEADERS_COFFEE) #closed with lid reset
